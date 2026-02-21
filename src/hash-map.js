@@ -8,7 +8,7 @@ class HashMap {
         this.capacity = 16;
         this.loadFactor = 0.75;
         this.size = 0;
-        this.buckets = Array.from({ length: capacity }, () => new LinkedList());
+        this.buckets = Array.from({ length: this.capacity }, () => new LinkedList());
     }
 
     /**
@@ -36,16 +36,26 @@ class HashMap {
      * @param {string} value - The value assigned to the key.
      */
     set(key, value) {
-        // If the new hash map size reaches the loadFactor, resize.
-        if (this.size + 1 / this.capacity >= this.loadFactor) {
+        // Resize if needd
+        if ((this.size + 1) / this.capacity >= this.loadFactor) {
             this.resize();
         }
 
         // Generate hash code and bucket for the current key
         const hashCode = this.hash(key);
-        const bucket = hashCode % capacity;
+        const bucketIndex = hashCode % this.capacity;
+        const bucket = this.buckets[bucketIndex];
 
-        // Update size
+        // Overwrite existing key if found
+        for (const data of bucket) {
+            if (data.key === key) {
+                data.value = value; // Update in place
+                return; // Do not increase size
+            }
+        }
+
+        // Otherwise append new entry
+        bucket.append({ key, value });
         this.size += 1;
     }
 
@@ -55,11 +65,12 @@ class HashMap {
 
         // Double capacity and create new buckets
         this.capacity *= 2;
-        this.buckets = Array.from({ length: capacity }, () => new LinkedList());
+        this.buckets = Array.from({ length: this.capacity }, () => new LinkedList());
 
         // Reset size before reinsterting each key
         this.size = 0;
 
+        // Use iterator to insert keys back into the new buckets
         for (const bucket of oldBuckets) {
             for (const { key, value } of bucket) {
                 this.set(key, value);
@@ -67,3 +78,5 @@ class HashMap {
         }
     }
 }
+
+export { HashMap };

@@ -4,10 +4,10 @@
 class Node {
     /**
      * Creates a new node.
-     * @param {*} value - The value stored in the node.
+     * @param {*} data - The data stored in the node.
      */
-    constructor(value) {
-        this.value = value;
+    constructor(data) {
+        this.data = data;
         this.next = null;
     }
 }
@@ -22,12 +22,12 @@ class LinkedList {
     }
 
     /**
-     * Adds a value to the end of the list.
+     * Adds a data to the end of the list.
      *
-     * @param {*} value - The value to append.
+     * @param {*} data - The data to append.
      */
-    append(value) {
-        const newNode = new Node(value);
+    append(data) {
+        const newNode = new Node(data);
 
         // If empty list, add node as head and tail
         if (!this.head) {
@@ -42,12 +42,12 @@ class LinkedList {
     }
 
     /**
-     * Adds a value to the beginning of the list.
+     * Adds a data to the beginning of the list.
      *
-     * @param {*} value - The value to append.
+     * @param {*} data - The data to append.
      */
-    prepend(value) {
-        const newNode = new Node(value);
+    prepend(data) {
+        const newNode = new Node(data);
 
         // If list not empty, shift it to next position
         if (this.head) {
@@ -80,28 +80,28 @@ class LinkedList {
     }
 
     /**
-     * Returns the value of the first node in the list
+     * Returns the data of the first node in the list
      *
-     * @returns {*} The value of the head node, or undefined if it doesn't exist.
+     * @returns {*} The data of the head node, or undefined if it doesn't exist.
      */
     head() {
-        return this.head ? this.head.value : undefined;
+        return this.head ? this.head.data : undefined;
     }
 
     /**
-     * Returns the value of the final node in the list
+     * Returns the data of the final node in the list
      *
-     * @returns {*} The value of the tail node, or undefined if it doesn't exist.
+     * @returns {*} The data of the tail node, or undefined if it doesn't exist.
      */
     tail() {
-        return this.tail ? this.tail.value : undefined;
+        return this.tail ? this.tail.data : undefined;
     }
 
     /**
-     * Returns the value of the node at the given index.
+     * Returns the data of the node at the given index.
      *
      * @param {*} index - The index of the node to retrieve.
-     * @returns {*} The value of the node, or undefined if it doesn't exist.
+     * @returns {*} The data of the node, or undefined if it doesn't exist.
      */
     at(index) {
         // Handle negative index.
@@ -114,19 +114,19 @@ class LinkedList {
             current = current.next;
             i++;
         }
-        return current ? current.value : undefined;
+        return current ? current.data : undefined;
     }
 
     /**
-     * Removes the head node from the list and returns its value.
+     * Removes the head node from the list and returns its data.
      *
-     * @returns {*} The value of the removed head node.
+     * @returns {*} The data of the removed head node.
      */
     pop() {
         // Handle empty list
         if (!this.head) return undefined;
 
-        const value = this.head.value;
+        const data = this.head.data;
         this.head = this.head.next;
 
         // Handle empty list after popping a single node;
@@ -134,37 +134,37 @@ class LinkedList {
             this.tail = null;
         }
 
-        return value;
+        return data;
     }
 
     /**
-     * Returns true if the passed in value is in the list, otherwise returns false.
+     * Returns true if the passed in data is in the list, otherwise returns false.
      *
-     * @returns {boolean} Whether the value is contained or not.
+     * @returns {boolean} Whether the data is contained or not.
      */
-    contains(value) {
+    contains(data) {
         let current = this.head;
 
         while (current) {
-            if (current.value === value) return true;
+            if (current.data === data) return true;
             current = current.next;
         }
         return false;
     }
 
     /**
-     * Returns the index of the node containing the given value. If the value can’t be found, returns -1.
-     * If more than one node have matching values, the first-found node's index is returned.
+     * Returns the index of the node containing the given data. If the data can’t be found, returns -1.
+     * If more than one node have matching datas, the first-found node's index is returned.
      *
-     * @param {*} value - The value to search the index of.
-     * @returns {number} The index at which the value was found.
+     * @param {*} data - The data to search the index of.
+     * @returns {number} The index at which the data was found.
      */
-    findIndex(value) {
+    findIndex(data) {
         let current = this.head;
         let i = 0;
 
         while (current) {
-            if (current.value === value) return i;
+            if (current.data === data) return i;
             current = current.next;
             i++;
         }
@@ -174,29 +174,30 @@ class LinkedList {
     /**
      * Returns the linked list as a string to preview in the console.
      *
-     * @returns {string} A string in the format (value) -> (value) -> (null)
+     * @returns {string} A string in the format (data) -> (data) -> (null)
      */
     toString() {
         let current = this.head;
         let string = '';
 
         while (current) {
-            string += `( ${current.value.toString()} ) -> `;
+            string += `( ${current.data.toString()} ) -> `;
             current = current.next;
         }
 
         return string + '(null)';
     }
+
+    /**
+     * Implements the iterator protocol using a generator function.
+     */
+    *[Symbol.iterator]() {
+        let current = this.head;
+        while (current) {
+            yield current.data;
+            current = current.next;
+        }
+    }
 }
 
-// Testing the code
-const list = new LinkedList();
-
-list.append('dog');
-list.append('cat');
-list.append('parrot');
-list.append('hamster');
-list.append('snake');
-list.append('turtle');
-
-console.log(list.toString());
+export { LinkedList };
