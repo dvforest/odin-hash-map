@@ -100,6 +100,25 @@ class HashMap {
         }
         return null;
     }
+
+    /**
+     * Returns true or false based on whether the given key is found.
+     *
+     * @param {string} key - The key to search for.
+     * @returns {boolean} If the key is found.
+     */
+    has(key) {
+        // Locate the bucket based on the key
+        const hashCode = this.hash(key);
+        const bucketIndex = hashCode % this.capacity;
+        const bucket = this.buckets[bucketIndex];
+
+        // Search the linked list for the key
+        for (const entry of bucket) {
+            if (entry.key === key) return true;
+        }
+        return false;
+    }
 }
 
 export { HashMap };
