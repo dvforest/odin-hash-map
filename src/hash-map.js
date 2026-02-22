@@ -88,7 +88,18 @@ class HashMap {
      * @param {string} key - The key used to retrieve the value.
      * @returns {*} The value found at the key.
      */
-    get(key) {}
+    get(key) {
+        // Locate the bucket based on the key
+        const hashCode = this.hash(key);
+        const bucketIndex = hashCode % this.capacity;
+        const bucket = this.buckets[bucketIndex];
+
+        // Search the linked list for the value and return it.
+        for (const entry of bucket) {
+            if (entry.key === key) return entry;
+        }
+        return null;
+    }
 }
 
 export { HashMap };
