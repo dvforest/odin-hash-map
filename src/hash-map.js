@@ -12,10 +12,11 @@ class HashMap {
     }
 
     /**
-     * Generates a hash code by adding the charcode from each character of a string
+     * Generates a hash code by adding the charcode from each character of a string.
      *
      *
      * @param {string} key - The string key used to generate the hash code.
+     * @returns {number} The generated hash code.
      */
     hash(key) {
         const MOD = 1000000007; // To avoid exceedingly large integers.
@@ -59,6 +60,9 @@ class HashMap {
         this.size += 1;
     }
 
+    /**
+     * Double the capacity and redistribute the existing keys in the new buckets.
+     */
     resize() {
         // Temporarily store old buckets
         const oldBuckets = this.buckets;
@@ -77,6 +81,14 @@ class HashMap {
             }
         }
     }
+
+    /**
+     * Returns the stored value based on a given key, or null if not found.
+     *
+     * @param {string} key - The key used to retrieve the value.
+     * @returns {*} The value found at the key.
+     */
+    get(key) {}
 }
 
 export { HashMap };
