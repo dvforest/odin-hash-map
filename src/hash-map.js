@@ -113,7 +113,41 @@ class HashMap {
      */
     remove(key) {
         const bucket = this.getBucket(key);
-        return bucket.remove((entry) => entry.key === key);
+        if (bucket.remove((entry) => entry.key === key)) {
+            this.size -= 1;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the total number of stored keys in the hash map.
+     * @returns {number} The total of stored keys.
+     */
+    length() {
+        return this.size;
+    }
+
+    /**
+     * Removes all entries in the hash map while keeping the same capacity.
+     */
+    clear() {
+        this.buckets = Array.from({ length: this.capacity }, () => new LinkedList());
+        this.size = 0;
+    }
+
+    /**
+     * Returns an array containing all keys in the hash map.
+     * @returns {string[]} An array of stored keys.
+     */
+    keys() {
+        const array = [];
+        for (const bucket of this.buckets) {
+            for (const entry of bucket) {
+                array.push(entry.key);
+            }
+        }
+        return array;
     }
 
     /**
