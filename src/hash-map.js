@@ -141,13 +141,13 @@ class HashMap {
      * @returns {string[]} An array of stored keys.
      */
     keys() {
-        const array = [];
+        const keys = [];
         for (const bucket of this.buckets) {
             for (const entry of bucket) {
                 array.push(entry.key);
             }
         }
-        return array;
+        return keys;
     }
 
     /**
@@ -155,13 +155,27 @@ class HashMap {
      * @returns {*[]} An array of stored values.
      */
     values() {
-        const array = [];
+        const values = [];
         for (const bucket of this.buckets) {
             for (const entry of bucket) {
                 array.push(entry.value);
             }
         }
-        return array;
+        return values;
+    }
+
+    /**
+     * Returns an array containing all key-value pairs in the hash map.
+     * @returns {[string, *][]} An array of stored key-value pairs.
+     */
+    entries() {
+        const entries = [];
+        for (const bucket of this.buckets) {
+            for (const entry of bucket) {
+                array.push([entry.key, entry.value]);
+            }
+        }
+        return entries;
     }
 
     /**
