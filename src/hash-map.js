@@ -34,24 +34,21 @@ class HashMap {
      * Assigns a value to a key and store it in the hash map.
      *
      * @param {string} key - The name of the key.
-     * @param {string} value - The value assigned to the key.
+     * @param {*} value - The value assigned to the key.
      */
     set(key, value) {
-        // Resize if needd
+        // Resize if needed
         if ((this.size + 1) / this.capacity >= this.loadFactor) {
             this.resize();
         }
 
-        // Generate hash code and bucket for the current key
-        const hashCode = this.hash(key);
-        const bucketIndex = hashCode % this.capacity;
-        const bucket = this.buckets[bucketIndex];
+        const bucket = this.getBucket(key);
 
         // Overwrite existing key if found
         for (const data of bucket) {
             if (data.key === key) {
-                data.value = value; // Update in place
-                return; // Do not increase size
+                data.value = value;
+                return;
             }
         }
 
@@ -89,14 +86,9 @@ class HashMap {
      * @returns {*} The value found at the key.
      */
     get(key) {
-        // Locate the bucket based on the key
-        const hashCode = this.hash(key);
-        const bucketIndex = hashCode % this.capacity;
-        const bucket = this.buckets[bucketIndex];
-
-        // Search the linked list for the value and return it.
+        const bucket = this.getBucket(key);
         for (const entry of bucket) {
-            if (entry.key === key) return entry;
+            if (entry.key === key) return entry.value;
         }
         return null;
     }
@@ -108,16 +100,31 @@ class HashMap {
      * @returns {boolean} If the key is found.
      */
     has(key) {
-        // Locate the bucket based on the key
-        const hashCode = this.hash(key);
-        const bucketIndex = hashCode % this.capacity;
-        const bucket = this.buckets[bucketIndex];
-
-        // Search the linked list for the key
+        const bucket = this.getBucket(key);
         for (const entry of bucket) {
             if (entry.key === key) return true;
         }
         return false;
+    }
+
+    /**
+     * Removes an entry associated with a given key.
+     * @param {string} key - The key of the node to remove.
+     */
+    remove(key) {
+        const bucket = this.getBucket(key);
+        return bucket.remove((entry) => entry.key === key);
+    }
+
+    /**
+     * Returns the bucket (linked list) associated with a given key.
+     * @param {string} key - The key to hash in order to locate its bucket.
+     * @returns {LinkedList} The bucket where entries for this key are stored.
+     */
+    getBucket(key) {
+        const hashCode = this.hash(key);
+        const bucketIndex = hashCode % this.capacity;
+        return this.buckets[bucketIndex];
     }
 }
 

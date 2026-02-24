@@ -98,26 +98,6 @@ class LinkedList {
     }
 
     /**
-     * Returns the data of the node at the given index.
-     *
-     * @param {*} index - The index of the node to retrieve.
-     * @returns {*} The data of the node, or undefined if it doesn't exist.
-     */
-    at(index) {
-        // Handle negative index.
-        if (index < 0) return undefined;
-
-        let current = this.head;
-        let i = 0;
-
-        while (current && i < index) {
-            current = current.next;
-            i++;
-        }
-        return current ? current.data : undefined;
-    }
-
-    /**
      * Removes the head node from the list and returns its data.
      *
      * @returns {*} The data of the removed head node.
@@ -138,54 +118,36 @@ class LinkedList {
     }
 
     /**
-     * Returns true if the passed in data is in the list, otherwise returns false.
+     * Removes the first node whose data satisfies the given predicate.
      *
-     * @returns {boolean} Whether the data is contained or not.
+     * @param {(data: any) => boolean} predicate - A function that returns true for the node to remove.
+     * @returns {boolean} True if a node was removed, otherwise false.
      */
-    contains(data) {
+    remove(predicate) {
+        if (!this.head) return false;
+
+        // Removing the head
+        if (predicate(this.head.data)) {
+            this.head = this.head.next;
+            this.tail = this.head ? this.tail : null; // If empty list, update tail
+            return true;
+        }
+
         let current = this.head;
 
-        while (current) {
-            if (current.data === data) return true;
+        while (current.next) {
+            if (predicate(current.next.data)) {
+                // Update tail
+                if (current.next === this.tail) {
+                    this.tail = current;
+                }
+                // Skip the node
+                current.next = current.next.next;
+                return true;
+            }
             current = current.next;
         }
         return false;
-    }
-
-    /**
-     * Returns the index of the node containing the given data. If the data can’t be found, returns -1.
-     * If more than one node have matching datas, the first-found node's index is returned.
-     *
-     * @param {*} data - The data to search the index of.
-     * @returns {number} The index at which the data was found.
-     */
-    findIndex(data) {
-        let current = this.head;
-        let i = 0;
-
-        while (current) {
-            if (current.data === data) return i;
-            current = current.next;
-            i++;
-        }
-        return -1;
-    }
-
-    /**
-     * Returns the linked list as a string to preview in the console.
-     *
-     * @returns {string} A string in the format (data) -> (data) -> (null)
-     */
-    toString() {
-        let current = this.head;
-        let string = '';
-
-        while (current) {
-            string += `( ${current.data.toString()} ) -> `;
-            current = current.next;
-        }
-
-        return string + '(null)';
     }
 
     /**
