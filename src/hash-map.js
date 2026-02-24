@@ -151,6 +151,20 @@ class HashMap {
     }
 
     /**
+     * Returns an array containing all values in the hash map.
+     * @returns {*[]} An array of stored values.
+     */
+    values() {
+        const array = [];
+        for (const bucket of this.buckets) {
+            for (const entry of bucket) {
+                array.push(entry.value);
+            }
+        }
+        return array;
+    }
+
+    /**
      * Returns the bucket (linked list) associated with a given key.
      * @param {string} key - The key to hash in order to locate its bucket.
      * @returns {LinkedList} The bucket where entries for this key are stored.
