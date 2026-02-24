@@ -144,7 +144,7 @@ class HashMap {
         const keys = [];
         for (const bucket of this.buckets) {
             for (const entry of bucket) {
-                array.push(entry.key);
+                keys.push(entry.key);
             }
         }
         return keys;
@@ -158,7 +158,7 @@ class HashMap {
         const values = [];
         for (const bucket of this.buckets) {
             for (const entry of bucket) {
-                array.push(entry.value);
+                values.push(entry.value);
             }
         }
         return values;
@@ -172,7 +172,7 @@ class HashMap {
         const entries = [];
         for (const bucket of this.buckets) {
             for (const entry of bucket) {
-                array.push([entry.key, entry.value]);
+                entries.push([entry.key, entry.value]);
             }
         }
         return entries;
